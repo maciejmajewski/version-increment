@@ -30,6 +30,18 @@ inputs:
     description: 'Use the GitHub API to discover current tags, which avoids the need for a git checkout, but requires `curl` and `jq`'
     required: false
     default: false
+  current_ref:
+    description: 'The current ref to use when checking for pre-release'
+    required: false
+    default: ${{ github.ref }}
+  github-token:
+    description: 'The GitHub token used to create an authenticated client'
+    default: ${{ github.token }}
+    required: false
+  github-repository:
+    description: 'The GitHub repository to use when using the GitHub API'
+    default: ${{ github.repository }}
+    required: false
 
 outputs:
   current-version:
@@ -73,7 +85,8 @@ runs:
       run: ${{ github.action_path }}/version-lookup.sh
       shell: bash
       env:
-        github_token: ${{ github.token }}
+        github_token: ${{ inputs.github-token }}
+        github_repository: ${{ inputs.github-repository }}
         scheme: ${{ inputs.scheme }}
         use_api: ${{ inputs.use_api }}
 
@@ -81,9 +94,11 @@ runs:
       run: ${{ github.action_path }}/version-increment.sh
       shell: bash
       env:
+        github_token: ${{ inputs.github-token }}
+        github_repository: ${{ inputs.github-repository }}
+        current_ref: ${{ inputs.current_ref }}
         current_version: ${{ steps.version-lookup.outputs.CURRENT_VERSION }}
         increment: ${{ inputs.increment }}
-        github_token: ${{ github.token }}
         pep440: ${{ inputs.pep440 }}
         scheme: ${{ inputs.scheme }}
         release_branch: ${{ inputs.release_branch }}

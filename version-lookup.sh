@@ -30,7 +30,7 @@ if [[ "${use_api:-}" == 'true' ]] ; then
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${github_token}" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/git/matching-refs/tags/" \
+            "${GITHUB_API_URL}/repos/${github_repository}/git/matching-refs/tags/" \
         | jq -r '.[].ref' | sed 's|refs/tags/||g' \
         | { ${grep} -P "${pcre_allow_vprefix}" || true; } | sed 's/^v//g' | sort -V | tail -n 1
     )"

@@ -47,7 +47,7 @@ elif [[ -z "${BATS_VERSION:-}" ]] ; then
     fi
 fi
 
-current_ref="${GITHUB_REF:-}"
+current_ref="${current_ref:-$GITHUB_REF}"
 
 if [[ "${use_api:-}" == 'true' ]] ; then
     # because we cannot use `rev-parse` with the API, we'll take a punt that 9 characters is enough for uniqueness
