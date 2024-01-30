@@ -42,6 +42,10 @@ inputs:
     description: 'The GitHub repository to use when using the GitHub API'
     default: ${{ github.repository }}
     required: false
+  working-directory:
+    description: 'The working directory to use when using the GitHub API'
+    default: ${{ github.workspace }}
+    required: false
 
 outputs:
   current-version:
@@ -84,6 +88,7 @@ runs:
     - id: version-lookup
       run: ${{ github.action_path }}/version-lookup.sh
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
       env:
         github_token: ${{ inputs.github-token }}
         github_repository: ${{ inputs.github-repository }}
@@ -93,6 +98,7 @@ runs:
     - id: version-increment
       run: ${{ github.action_path }}/version-increment.sh
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
       env:
         github_token: ${{ inputs.github-token }}
         github_repository: ${{ inputs.github-repository }}
